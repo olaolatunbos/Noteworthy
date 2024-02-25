@@ -1,6 +1,6 @@
 # Noteworthy
 
-Note-taking app
+Notes Application 
 
 ![Smart Crypto2](img/nw.png)
 
@@ -9,11 +9,3 @@ Note-taking app
 - Firebase (authenticaion and database)
 
 
-
-# Resources
-
-[Flutter Documentation](https://docs.flutter.dev)
-
-[Crypto Compare Documentation](https://min-api.cryptocompare.com/documentation?key=Toplists&cat=TopTotalVolumeEndpointFull)
-
-[BLoC](https://bloclibrary.dev/#/)

@@ -60,6 +60,19 @@ class Note extends Equatable {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Note &&
+        other.id == id &&
+        other.title == title &&
+        other.content == content &&
+        other.uid == uid &&
+        other.color == color &&
+        other.group == group;
+  }
+
+  @override
   List<Object?> get props => [
         id,
         title,

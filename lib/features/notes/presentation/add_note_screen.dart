@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:noteworthy/constants/colors.dart';
 import 'package:noteworthy/constants/sizes.dart';
 import 'package:noteworthy/features/notes/presentation/notes_controller.dart';

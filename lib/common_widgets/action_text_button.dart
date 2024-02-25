@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:noteworthy/constants/sizes.dart';
 
 /// Text button to be used as an [AppBar] action
 class ActionTextButton extends StatelessWidget {
@@ -13,7 +12,7 @@ class ActionTextButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         child: Text(text,
-            style: TextStyle(color: Colors.black, fontFamily: "Poppins")),
+            style: const TextStyle(color: Colors.black, fontFamily: "Poppins")),
       ),
     );
   }

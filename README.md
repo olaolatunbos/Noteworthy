@@ -7,7 +7,7 @@ Notes Application
 
 ## Architecture
 - Riverpod App Architecture with the Controller-Service-Repository Pattern
-- Firebase (authenticaio, database and cloud functions)
+- Firebase (authentication, database and cloud functions)
   
 
 

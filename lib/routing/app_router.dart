@@ -56,14 +56,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                   path: "add-note",
                   name: AppRoute.addNote.name,
                   builder: (context, state) => const AddNoteScreen()),
+              GoRoute(
+                path: "edit/:id",
+                name: AppRoute.editNote.name,
+                builder: (context, state) {
+                  final noteId = state.pathParameters['id']!;
+                  return EditNoteScreen(noteId: noteId);
+                },
+              )
             ]),
-        GoRoute(
-          path: "/edit/:id",
-          name: AppRoute.editNote.name,
-          builder: (context, state) {
-            final noteId = state.pathParameters['id']!;
-            return EditNoteScreen(noteId: noteId);
-          },
-        )
       ]);
 });

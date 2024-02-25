@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noteworthy/features/authentication/data/authentication_repository.dart';
 import 'package:noteworthy/features/notes/data/notes_repository.dart';
 import 'package:noteworthy/features/notes/domain/note.dart';
@@ -22,8 +20,7 @@ class NoteController extends _$NoteController with NotifierMounted {
       {required String title,
       required String content,
       required String color,
-      required String group,
-      required void Function() onSuccess}) async {
+      required String group}) async {
     state = const AsyncValue.loading();
     final user = ref.read(authRepositoryProvider).currentUser;
     final newState = await AsyncValue.guard(() => ref
@@ -37,10 +34,9 @@ class NoteController extends _$NoteController with NotifierMounted {
     if (mounted) {
       state = newState;
       if (state.hasError == false) {
-        onSuccess();
+        ref.read(goRouterProvider).pop();
       }
     }
-    onSuccess();
   }
 
   Future<void> updateNote(
@@ -65,17 +61,15 @@ class NoteController extends _$NoteController with NotifierMounted {
     state.hasError == false;
   }
 
-  Future<void> deleteNote(
-      {required Note note, required void Function() onSuccess}) async {
+  Future<void> deleteNote({required Note note}) async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(
         () => ref.read(notesRepositoryProvider).deleteNote(note.id));
     if (mounted) {
       state = newState;
       if (state.hasError == false) {
-        onSuccess();
+        ref.read(goRouterProvider).pop();
       }
     }
-    onSuccess();
   }
 }

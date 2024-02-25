@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:noteworthy/constants/colors.dart';
 import 'package:noteworthy/constants/sizes.dart';
 import 'package:noteworthy/features/notes/presentation/notes_controller.dart';
+import 'package:noteworthy/utils/async_value_ui.dart';
 
 class AddNoteScreen extends ConsumerStatefulWidget {
   const AddNoteScreen({super.key});
@@ -30,6 +31,10 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue>(
+      noteControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
     const isLoading = false;
     String selectedColor = "";
     return Scaffold(
@@ -46,7 +51,6 @@ class _AddNoteScreen extends ConsumerState<AddNoteScreen> {
                         content: _informationController.text,
                         group: "",
                         color: selectedColor,
-                        onSuccess: context.pop,
                       ),
               icon: const Icon(Icons.post_add_outlined))
         ],

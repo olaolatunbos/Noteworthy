@@ -9,6 +9,7 @@ import 'package:noteworthy/features/notes/data/notes_repository.dart';
 import 'package:noteworthy/features/notes/domain/note.dart';
 import 'package:noteworthy/features/notes/presentation/notes_controller.dart';
 import 'package:noteworthy/localization/string_hardcoded.dart';
+import 'package:noteworthy/utils/async_value_ui.dart';
 
 /// Notes are first created in [AddNoteScreen]
 
@@ -18,6 +19,10 @@ class EditNoteScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue>(
+      noteControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
     final noteValue = ref.watch(noteStreamProvider(noteId));
     return noteValue.when(
       data: (note) => note != null
@@ -121,7 +126,6 @@ class _EditScreenContentsState extends ConsumerState<EditScreenContents> {
                   ? null
                   : () => ref.read(noteControllerProvider.notifier).deleteNote(
                         note: note,
-                        onSuccess: context.pop,
                       ),
               icon: const Icon(Icons.delete_outline)),
           IconButton(

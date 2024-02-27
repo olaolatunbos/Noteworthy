@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:noteworthy/features/authentication/domain/app_user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -7,9 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'authentication_repository.g.dart';
 
 class AuthRepository {
-  AuthRepository(this._auth, this._firestore);
+  AuthRepository(this._auth);
   final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
 
   Future<void> signInWithEmailAndPassword(String email, String password) {
     return _auth.signInWithEmailAndPassword(
@@ -45,7 +43,7 @@ class AuthRepository {
 
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
-  return AuthRepository(FirebaseAuth.instance, FirebaseFirestore.instance);
+  return AuthRepository(FirebaseAuth.instance);
 }
 
 // * Using keepAlive since other providers need it to be an

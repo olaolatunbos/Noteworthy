@@ -10,26 +10,18 @@ class NotesRepository {
   const NotesRepository(this._firestore);
   final FirebaseFirestore _firestore;
 
+  static String notesPath() => 'notes';
+  static String notePath(NoteID id) => 'notes/$id';
+
   // one time read
   Future<List<Note>> fetchUserNotes(String uid) async {
-    final ref = _firestore
-        .collection('notes')
-        .withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        )
-        .where('uid', isEqualTo: uid);
+    final ref = _notesRef().where('uid', isEqualTo: uid);
     final snapshot = await ref.get();
     return snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList();
   }
 
   Stream<List<Note>> watchUserNotesByGroup(String uid, String group) {
-    final ref = _firestore
-        .collection('notes')
-        .withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        )
+    final ref = _notesRef()
         .where('uid', isEqualTo: uid)
         .where('group', isEqualTo: group);
     return ref.snapshots().map((snapshot) =>
@@ -38,31 +30,19 @@ class NotesRepository {
 
   // realtime listeners, UI will update every time the data changes on the backend.
   Stream<List<Note>> watchUserNotes(String uid) {
-    final ref = _firestore
-        .collection('notes')
-        .withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        )
-        .where('uid', isEqualTo: uid);
+    final ref = _notesRef().where('uid', isEqualTo: uid);
     return ref.snapshots().map((snapshot) =>
         snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
   }
 
   Future<Note?> fetchNote(NoteID id) async {
-    final ref = _firestore.doc('notes/$id').withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        );
+    final ref = _noteRef(id);
     final snapshot = await ref.get();
     return snapshot.data();
   }
 
   Stream<Note?> watchNote(NoteID id) {
-    final ref = _firestore.doc('notes/$id').withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        );
+    final ref = _noteRef(id);
     return ref.snapshots().map((snapshot) => snapshot.data());
   }
 
@@ -80,10 +60,7 @@ class NotesRepository {
         color: color,
         group: group,
         uid: uid);
-    final ref = _firestore.doc('notes/$noteId').withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        );
+    final ref = _noteRef(noteId);
 
     return ref.set(note);
   }
@@ -93,12 +70,20 @@ class NotesRepository {
   }
 
   Future<void> updateNote(Note note) {
-    final ref = _firestore.doc('notes/${note.id}').withConverter(
-          fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
-          toFirestore: (Note note, options) => note.toMap(),
-        );
+    final ref = _noteRef(note.id);
     return ref.set(note);
   }
+
+  DocumentReference<Note> _noteRef(NoteID id) =>
+      _firestore.doc(notePath(id)).withConverter(
+            fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
+            toFirestore: (Note product, options) => product.toMap(),
+          );
+
+  Query<Note> _notesRef() => _firestore.collection(notesPath()).withConverter(
+        fromFirestore: (doc, _) => Note.fromMap(doc.data()!),
+        toFirestore: (Note product, options) => product.toMap(),
+      );
 }
 
 @Riverpod(keepAlive: true)

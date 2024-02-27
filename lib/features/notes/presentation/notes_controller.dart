@@ -65,5 +65,11 @@ class NoteController extends _$NoteController with NotifierMounted {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(
         () => ref.read(notesRepositoryProvider).deleteNote(note.id));
+    if (mounted) {
+      state = newState;
+      if (state.hasError == false) {
+        ref.read(goRouterProvider).pop();
+      }
+    }
   }
 }
